@@ -228,9 +228,6 @@ public class Model extends Observable {
         if (emptySpaceExists(b)) {
             return true;
         }
-        if (maxTileExists(b)) {
-            return false;
-        }
         for (int i = 0; i < b.size(); i++) {
             for (int j = 0; j < b.size() - 1; j++) {
                 if (b.tile(i, j).value() == b.tile(i, j + 1).value()) {
