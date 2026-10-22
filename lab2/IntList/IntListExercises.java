@@ -31,9 +31,9 @@ public class IntListExercises {
                 IntList q = p;
                 while (q != null) {
                     if (q.first == max(p)) {
-                        q.first = 0
+                        q.first = 0;
                     }
-                    q = q.rest
+                    q = q.rest;
                 }
             }
             p = p.rest;
