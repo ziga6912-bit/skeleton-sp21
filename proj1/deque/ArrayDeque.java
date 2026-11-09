@@ -7,10 +7,10 @@ public class ArrayDeque<WhirlPool> {
     private int back;
     private int size;
     private int length = 8;
-    private WhirlPool[] ArrayDeque;
+    private WhirlPool[] items;
 
     public ArrayDeque() {
-        WhirlPool[] ArrayDeque = (WhirlPool[]) new Object[length];
+        items = (WhirlPool[]) new Object[length];
         size = 0;
         front = 4;
         back = 5;
@@ -33,10 +33,10 @@ public class ArrayDeque<WhirlPool> {
     }
 
     private void resize() {
-        WhirlPool[] newArrayDeque = (WhirlPool[]) new Object[2 * length];
-        System.arraycopy(ArrayDeque, 0, newArrayDeque, 0, front + 1);
-        System.arraycopy(ArrayDeque, back, newArrayDeque, length + front + 1, length - front - 1);
-        ArrayDeque = newArrayDeque;
+        WhirlPool[] newitems = (WhirlPool[]) new Object[2 * length];
+        System.arraycopy(items, 0, newitems, 0, front + 1);
+        System.arraycopy(items, back, newitems, length + front + 1, length - front - 1);
+        items = newitems;
         length *= 2;
         back = front + 1;
         front = length + front;
@@ -45,10 +45,10 @@ public class ArrayDeque<WhirlPool> {
     public void addFirst(WhirlPool item) {
         size += 1;
         if (size <= length) {
-            ArrayDeque[front] = item;;
+            items[front] = item;;
         } else {
             resize();
-            ArrayDeque[front] = item;
+            items[front] = item;
         }
         changeFront();
     }
@@ -56,10 +56,9 @@ public class ArrayDeque<WhirlPool> {
     public void addLast(WhirlPool item) {
         size += 1;
         if (size <= length) {
-            ArrayDeque[back] = item;;
-        } else {
+            items[back] = item;
             resize();
-            ArrayDeque[back] = item;
+            items[back] = item;
         }
         changeBack();
     }
@@ -75,22 +74,22 @@ public class ArrayDeque<WhirlPool> {
     public void printDeque() {
         if (front == length - 1) {
             for (int i = 0; i <= back - 1; i++) {
-                System.out.print(ArrayDeque[i] + " ");
+                System.out.print(items[i] + " ");
             }
         } else if (back == 0) {
             for (int i = front + 1; i <= length - 1; i++) {
-                System.out.print(ArrayDeque[i] + " ");
+                System.out.print(items[i] + " ");
             }
         } else if (front >= back) {
             for(int i = front + 1; i <= length - 1; i++) {
-                System.out.print(ArrayDeque[i] + " ");
+                System.out.print(items[i] + " ");
             }
             for (int i = 0; i <= back - 1; i++) {
-                System.out.print(ArrayDeque[i] + " ");
+                System.out.print(items[i] + " ");
             }
         } else {
             for (int i = front + 1; i <= back - 1; i++) {
-                System.out.print(ArrayDeque[i] + " ");
+                System.out.print(items[i] + " ");
             }
         }
         System.out.println();
@@ -106,7 +105,7 @@ public class ArrayDeque<WhirlPool> {
             } else {
                 front += 1;
             }
-            return ArrayDeque[i];
+            return items[i];
         }
     }
 
@@ -120,15 +119,15 @@ public class ArrayDeque<WhirlPool> {
             } else {
                 back -= 1;
             }
-            return ArrayDeque[i];
+            return items[i];
         }
     }
 
     public WhirlPool get(int index) {
         if (front + index + 1 > length - 1) {
-            return ArrayDeque[front + index + 1 - length];
+            return items[front + index + 1 - length];
         } else {
-            return ArrayDeque[front + index + 1];
+            return items[front + index + 1];
         }
     }
 
