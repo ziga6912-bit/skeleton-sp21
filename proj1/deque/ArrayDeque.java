@@ -37,7 +37,7 @@ public class ArrayDeque<WhirlPool> {
     public void addFirst(WhirlPool item) {
         size += 1;
         if (size <= length) {
-            items[front] = item;;
+            items[front] = item;
         } else {
             resize();
             items[front] = item;
@@ -49,6 +49,7 @@ public class ArrayDeque<WhirlPool> {
         size += 1;
         if (size <= length) {
             items[back] = item;
+        } else {
             resize();
             items[back] = item;
         }
