@@ -4,23 +4,23 @@ import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
 
-public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
+public class ArrayDeque<T> implements Iterable<T> {
 
     private int front;
     private int back;
     private int size;
     private int length = 8;
-    private WhirlPool[] items;
+    private T[] items;
 
     public ArrayDeque() {
-        items = (WhirlPool[]) new Object[length];
+        items = (T[]) new Object[length];
         size = 0;
         front = 4;
         back = 5;
     }
 
     private void sizeup() {
-        WhirlPool[] otheritems = (WhirlPool[]) new Object[2 * length];
+        T[] otheritems = (T[]) new Object[2 * length];
         for (int i = 0; i < size; i++) {
             otheritems[i] = get(i);
         }
@@ -31,7 +31,7 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
     }
 
     private void sizedown() {
-        WhirlPool[] otheritems = (WhirlPool[]) new Object[length / 4];
+        T[] otheritems = (T[]) new Object[length / 4];
         for (int i = 0; i < size; i++) {
             otheritems[i] = get(i);
         }
@@ -41,7 +41,7 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
         back = size;
     }
 
-    public void addFirst(WhirlPool item) {
+    public void addFirst(T item) {
         size += 1;
         if (size <= length) {
             items[front] = item;
@@ -52,7 +52,7 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
         front = (front - 1 + length) % length;
     }
 
-    public void addLast(WhirlPool item) {
+    public void addLast(T item) {
         size += 1;
         if (size <= length) {
             items[back] = item;
@@ -78,7 +78,7 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
         System.out.println();
     }
 
-    public WhirlPool removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         } else {
@@ -91,7 +91,7 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
         }
     }
 
-    public WhirlPool removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         } else {
@@ -104,15 +104,15 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
         }
     }
 
-    public WhirlPool get(int index) {
+    public T get(int index) {
         return items[((front + 1) % length + index) % length];
     }
 
-    public Iterator<WhirlPool> iterator() {
+    public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
 
-    private class ArrayDequeIterator implements Iterator<WhirlPool> {
+    private class ArrayDequeIterator implements Iterator<T> {
         int WizPos;
 
         public ArrayDequeIterator() {
@@ -125,7 +125,7 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
         }
 
         @Override
-        public WhirlPool next() {
+        public T next() {
             WizPos = (WizPos + 1) % length;
             return items[(WizPos - 1 + length) % length];
         }
@@ -133,7 +133,8 @@ public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ArrayDeque<?> otherArrayDeque) {
+        if (o instanceof ArrayDeque<?>) {
+            ArrayDeque<?> otherArrayDeque = (ArrayDeque<?>) o;
             if (size != otherArrayDeque.size()) {
                 return false;
             }

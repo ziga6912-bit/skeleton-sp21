@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
+public class LinkedListDeque<T> implements Iterable<T> {
 
     private static class Node<WhirlPool> {
         public Node<WhirlPool> front;
@@ -17,17 +17,17 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
     }
 
     private int size;
-    private Node<WhirlPool> sentinel;
+    private Node<T> sentinel;
 
     public LinkedListDeque() {
-        sentinel = new Node<WhirlPool>(null, null, null);
+        sentinel = new Node<T>(null, null, null);
         sentinel.front = sentinel;
         sentinel.back = sentinel;
         size = 0;
     }
 
-    public void addFirst(WhirlPool item) {
-        Node<WhirlPool> node = new Node<>(null, item, null);
+    public void addFirst(T item) {
+        Node<T> node = new Node<>(null, item, null);
         node.back = sentinel.back;
         sentinel.back.front = node;
         sentinel.back = node;
@@ -35,8 +35,8 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
         size += 1;
     }
 
-    public void addLast(WhirlPool item) {
-        Node<WhirlPool> node = new Node<>(null, item, null);
+    public void addLast(T item) {
+        Node<T> node = new Node<>(null, item, null);
         node.front = sentinel.front;
         sentinel.front.back = node;
         sentinel.front = node;
@@ -53,7 +53,7 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
     }
 
     public void printDeque() {
-        Node<WhirlPool> node  = sentinel.back;
+        Node<T> node  = sentinel.back;
         while (node != sentinel) {
             System.out.print(node.item + " ");
             node = node.back;
@@ -61,37 +61,37 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
         System.out.println();
     }
 
-    public WhirlPool removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         } else {
             size -= 1;
-            Node<WhirlPool> node1  = sentinel.back;
-            Node<WhirlPool> node2  = sentinel.back.back;
+            Node<T> node1  = sentinel.back;
+            Node<T> node2  = sentinel.back.back;
             sentinel.back = node2;
             node2.front = sentinel;
             return node1.item;
         }
     }
 
-    public WhirlPool removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         } else {
             size -= 1;
-            Node<WhirlPool> node1  = sentinel.front;
-            Node<WhirlPool> node2  = sentinel.front.front;
+            Node<T> node1  = sentinel.front;
+            Node<T> node2  = sentinel.front.front;
             sentinel.front = node2;
             node2.back = sentinel;
             return node1.item;
         }
     }
 
-    public WhirlPool get(int index) {
+    public T get(int index) {
         if (isEmpty()) {
             return null;
         } else {
-            Node<WhirlPool> node = sentinel;
+            Node<T> node = sentinel;
             for (int i = index; i >=0; i--) {
                 node = node.back;
             }
@@ -99,28 +99,28 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
         }
     }
 
-    public WhirlPool getRecursive(int index) {
+    public T getRecursive(int index) {
         if (isEmpty()) {
             return null;
         } else {
-            Node<WhirlPool> node = sentinel.back;
+            Node<T> node = sentinel.back;
             return getRecursiveHelper(node, index);
             }
     }
 
-    private WhirlPool getRecursiveHelper(Node<WhirlPool> node, int index) {
+    private T getRecursiveHelper(Node<T> node, int index) {
         if (index == 0) {
             return node.item;
         }
         return getRecursiveHelper(node.back, index - 1);
     }
 
-    public Iterator<WhirlPool> iterator() {
+    public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
 
-    private class LinkedListDequeIterator implements Iterator<WhirlPool> {
-        private Node<WhirlPool> WizPos;
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private Node<T> WizPos;
 
         public LinkedListDequeIterator() {
             WizPos = sentinel.back;
@@ -132,7 +132,7 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
         }
 
         @Override
-        public WhirlPool next() {
+        public T next() {
             WizPos = WizPos.back;
             return WizPos.item;
         }
@@ -140,7 +140,8 @@ public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof LinkedListDeque<?> otherLLDeque) {
+        if (o instanceof LinkedListDeque) {
+            LinkedListDeque<?> otherLLDeque = (LinkedListDeque<?>) o;
             if (size != otherLLDeque.size()) {
                 return false;
             }
