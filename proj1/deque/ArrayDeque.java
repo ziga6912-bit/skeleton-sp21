@@ -6,11 +6,11 @@ import java.util.Iterator;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
-    public int front;
-    public int back;
-    public int size;
-    public int length = 8;
-    public T[] items;
+    private int front;
+    private int back;
+    private int size;
+    private int length = 8;
+    private T[] items;
 
     public ArrayDeque() {
         items = (T[]) new Object[length];
@@ -38,7 +38,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         items = otheritems;
         length /= 2;
         front = length - 1;
-        back = size;
+        back = 0;
     }
 
     @Override
@@ -116,33 +116,33 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     private class ArrayDequeIterator implements Iterator<T> {
-        int WizPos;
+        int wizPos;
 
         public ArrayDequeIterator() {
-            WizPos = (front + 1) % length;
+            wizPos = (front + 1) % length;
         }
 
         @Override
         public boolean hasNext() {
-            return WizPos != (back - 1 + length) % length;
+            return wizPos != (back - 1 + length) % length;
         }
 
         @Override
         public T next() {
-            WizPos = (WizPos + 1) % length;
-            return items[(WizPos - 1 + length) % length];
+            wizPos = (wizPos + 1) % length;
+            return items[(wizPos - 1 + length) % length];
         }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ArrayDeque<?>) {
+        if (o instanceof Deque<?>) {
             ArrayDeque<?> otherArrayDeque = (ArrayDeque<?>) o;
             if (size != otherArrayDeque.size()) {
                 return false;
             }
             for (int i = 0; i < size; i++) {
-                if (get(i) != otherArrayDeque.get(i)) {
+                if (!get(i).equals(otherArrayDeque.get(i))) {
                     return false;
                 }
             }
