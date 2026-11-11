@@ -1,7 +1,10 @@
 package deque;
+
+import java.util.Iterator;
+
 @SuppressWarnings("unchecked")
 
-public class ArrayDeque<WhirlPool> {
+public class ArrayDeque<WhirlPool> implements Iterable<WhirlPool> {
 
     private int front;
     private int back;
@@ -16,22 +19,26 @@ public class ArrayDeque<WhirlPool> {
         back = 5;
     }
 
-    private void resize() {
-        WhirlPool[] newitems = (WhirlPool[]) new Object[2 * length];
-        int j = length / 2;
-        int start = (front + 1) % length;
-        int end = (back - 1 + length) % length;
-        if (end < start) {
-            end += length;
+    private void sizeup() {
+        WhirlPool[] otheritems = (WhirlPool[]) new Object[2 * length];
+        for (int i = 0; i < size; i++) {
+            otheritems[i] = get(i);
         }
-        for (int i = start; i <= end; i++) {
-            newitems[j] = items[i % length];
-            j += 1;
-        }
-        items = newitems;
+        items = otheritems;
         front = length / 2 - 1;
-        back = j + 1;
+        back = length / 2 + size;
         length *= 2;
+    }
+
+    private void sizedown() {
+        WhirlPool[] otheritems = (WhirlPool[]) new Object[length / 4];
+        for (int i = 0; i < size; i++) {
+            otheritems[i] = get(i);
+        }
+        items = otheritems;
+        length /= 2;
+        front = length - 1;
+        back = size;
     }
 
     public void addFirst(WhirlPool item) {
@@ -39,7 +46,7 @@ public class ArrayDeque<WhirlPool> {
         if (size <= length) {
             items[front] = item;
         } else {
-            resize();
+            sizeup();
             items[front] = item;
         }
         front = (front - 1 + length) % length;
@@ -50,7 +57,7 @@ public class ArrayDeque<WhirlPool> {
         if (size <= length) {
             items[back] = item;
         } else {
-            resize();
+            sizeup();
             items[back] = item;
         }
         back = (back + 1) % length;
@@ -65,13 +72,8 @@ public class ArrayDeque<WhirlPool> {
     }
 
     public void printDeque() {
-        int start = (front + 1) % length;
-        int end = (back - 1 + length) % length;
-        if (end < start) {
-            end += length;
-        }
-        for (int i = start; i <= end; i++) {
-            System.out.print(items[i % length] + " ");
+        for (int i = 0; i < size; i++) {
+            System.out.print(get(i) + " ");
         }
         System.out.println();
     }
@@ -81,6 +83,9 @@ public class ArrayDeque<WhirlPool> {
             return null;
         } else {
             size -= 1;
+            if (length >= 16 && size / (double) length < 0.25) {
+                sizedown();
+            }
             front = (front + 1) % length;
             return items[front];
         }
@@ -91,6 +96,9 @@ public class ArrayDeque<WhirlPool> {
             return null;
         } else {
             size -= 1;
+            if (length >= 16 && size / (double) length < 0.25) {
+                sizedown();
+            }
             back = (back - 1 + length) % length;
             return items[back];
         }
@@ -100,45 +108,42 @@ public class ArrayDeque<WhirlPool> {
         return items[((front + 1) % length + index) % length];
     }
 
+    public Iterator<WhirlPool> iterator() {
+        return new ArrayDequeIterator();
+    }
 
+    private class ArrayDequeIterator implements Iterator<WhirlPool> {
+        int WizPos;
 
+        public ArrayDequeIterator() {
+            WizPos = (front + 1) % length;
+        }
 
+        @Override
+        public boolean hasNext() {
+            return WizPos != (back - 1 + length) % length;
+        }
 
+        @Override
+        public WhirlPool next() {
+            WizPos = (WizPos + 1) % length;
+            return items[(WizPos - 1 + length) % length];
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ArrayDeque<?> otherArrayDeque) {
+            if (size != otherArrayDeque.size()) {
+                return false;
+            }
+            for (int i = 0; i < size; i++) {
+                if (get(i) != otherArrayDeque.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

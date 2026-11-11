@@ -1,6 +1,8 @@
 package deque;
 
-public class LinkedListDeque<WhirlPool> {
+import java.util.Iterator;
+
+public class LinkedListDeque<WhirlPool> implements Iterable<WhirlPool> {
 
     private static class Node<WhirlPool> {
         public Node<WhirlPool> front;
@@ -111,5 +113,44 @@ public class LinkedListDeque<WhirlPool> {
             return node.item;
         }
         return getRecursiveHelper(node.back, index - 1);
+    }
+
+    public Iterator<WhirlPool> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
+    private class LinkedListDequeIterator implements Iterator<WhirlPool> {
+        private Node<WhirlPool> WizPos;
+
+        public LinkedListDequeIterator() {
+            WizPos = sentinel.back;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return WizPos.back != sentinel;
+        }
+
+        @Override
+        public WhirlPool next() {
+            WizPos = WizPos.back;
+            return WizPos.item;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof LinkedListDeque<?> otherLLDeque) {
+            if (size != otherLLDeque.size()) {
+                return false;
+            }
+            for (int i = 0; i < size; i++) {
+                if (get(i) != otherLLDeque.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
