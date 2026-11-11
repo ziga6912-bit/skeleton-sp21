@@ -4,13 +4,13 @@ import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
 
-public class ArrayDeque<T> implements Iterable<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
-    private int front;
-    private int back;
-    private int size;
-    private int length = 8;
-    private T[] items;
+    public int front;
+    public int back;
+    public int size;
+    public int length = 8;
+    public T[] items;
 
     public ArrayDeque() {
         items = (T[]) new Object[length];
@@ -41,6 +41,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         back = size;
     }
 
+    @Override
     public void addFirst(T item) {
         size += 1;
         if (size <= length) {
@@ -52,6 +53,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         front = (front - 1 + length) % length;
     }
 
+    @Override
     public void addLast(T item) {
         size += 1;
         if (size <= length) {
@@ -63,14 +65,12 @@ public class ArrayDeque<T> implements Iterable<T> {
         back = (back + 1) % length;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         for (int i = 0; i < size; i++) {
             System.out.print(get(i) + " ");
@@ -78,6 +78,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         System.out.println();
     }
 
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -91,6 +92,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         }
     }
 
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -104,6 +106,7 @@ public class ArrayDeque<T> implements Iterable<T> {
         }
     }
 
+    @Override
     public T get(int index) {
         return items[((front + 1) % length + index) % length];
     }
