@@ -137,19 +137,19 @@ public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
         @Override
         public T next() {
             wizPos = wizPos.back;
-            return wizPos.item;
+            return wizPos.front.item;
         }
     }
 
     @Override
     public boolean equals(Object o) {
         if (o instanceof Deque) {
-            Deque<?> otherLLDeque = (Deque<?>) o;
-            if (size != otherLLDeque.size()) {
+            Deque<?> otherDeque = (Deque<?>) o;
+            if (size != otherDeque.size()) {
                 return false;
             }
             for (int i = 0; i < size; i++) {
-                if (!get(i).equals(otherLLDeque.get(i))) {
+                if (!get(i).equals(otherDeque.get(i))) {
                     return false;
                 }
             }

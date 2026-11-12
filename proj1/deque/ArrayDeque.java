@@ -124,6 +124,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
+            if (isEmpty()) {
+                return false;
+            }
             return wizPos != (back - 1 + length) % length;
         }
 
@@ -137,12 +140,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public boolean equals(Object o) {
         if (o instanceof Deque<?>) {
-            Deque<?> otherArrayDeque = (Deque<?>) o;
-            if (size != otherArrayDeque.size()) {
+            Deque<?> otherDeque = (Deque<?>) o;
+            if (size != otherDeque.size()) {
                 return false;
             }
             for (int i = 0; i < size; i++) {
-                if (!get(i).equals(otherArrayDeque.get(i))) {
+                if (!get(i).equals(otherDeque.get(i))) {
                     return false;
                 }
             }
