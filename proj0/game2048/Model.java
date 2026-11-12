@@ -1,11 +1,12 @@
 package game2048;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Gan
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -107,46 +108,45 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
-        boolean changed;
-        changed = false;
+        boolean changed = false;
 
         board.setViewingPerspective(side);
 
-        for (int col = 0; col <= board.size() - 1; col++) {
-            for (int row = board.size() - 2; row >= 0; row--) {
-            Tile fnl = first_none_null_tile(col, row, board.size() - 1);
-            if (board.tile(col, row) == null) {
-                continue;
-            } else if (fnl == null) {
-                board.move(col, board.size() - 1, board.tile(col, row));
-                changed = true;
-            } else if (tile_combine(fnl, board.tile(col, row))) {
-                board.move(col, fnl.row(), board.tile(col, row));
-                changed = true;
-                score += 2 * fnl.value();
-                if (fnl.row() > 0 && fnl.row() - 1 >= row) {
-                    for (row = row - 1; row >= 0; row--) {
-                        Tile new_fnl = first_none_null_tile(col, row, fnl.row() - 1);
-                        if (board.tile(col, row) == null) {
-                            continue;
-                        } else if (new_fnl == null) {
-                            board.move(col, fnl.row() - 1, board.tile(col, row));
-                        } else if (tile_combine(new_fnl, board.tile(col, row))) {
-                            board.move(col, new_fnl.row(), board.tile(col, row));
-                            score += 2 * new_fnl.value();
-                        }
-                        else {
-                            board.move(col, new_fnl.row() - 1, board.tile(col, row));
-                        }
-                    }
+        for (int col = 0; col < board.size(); col++) {
+            // 1. 提取：把这一列非空的方块装进 List（从上到下）
+            ArrayList<Tile> tiles = new ArrayList<>();
+            for (int row = board.size() - 1; row >= 0; row--) {
+                Tile t = board.tile(col, row);
+                if (t != null) {
+                    tiles.add(t);
                 }
-                break;
-            } else {
-                board.move(col, fnl.row() - 1, board.tile(col, row));
-                changed = true;
+            }
+
+            // 2. 合并：在 List 里处理相邻的合并
+            ArrayList<Tile> merged = new ArrayList<>();
+            for (int i = 0; i < tiles.size(); i++) {
+                if (i + 1 < tiles.size() && tiles.get(i).value() == tiles.get(i + 1).value()) {
+                    // 合并操作：把下面的方块移上来
+                    board.move(col, board.size() - 1 - merged.size(), tiles.get(i + 1));
+                    score += 2 * tiles.get(i).value();
+                    changed = true;
+                    merged.add(tiles.get(i));
+                    i++; // 👈 规则2的终极克星：跳过下一个已经合并过的方块
+                } else {
+                    merged.add(tiles.get(i));
+                }
+            }
+
+            // 3. 放回：把处理好的方块，从最顶行开始按顺序塞回去
+            int targetRow = board.size() - 1;
+            for (Tile t : merged) {
+                if (board.tile(col, targetRow) != t) {
+                    board.move(col, targetRow, t);
+                    changed = true;
+                }
+                targetRow--;
             }
         }
-       }
 
         board.setViewingPerspective(Side.NORTH);
 
@@ -155,25 +155,6 @@ public class Model extends Observable {
             setChanged();
         }
         return changed;
-    }
-
-    /*check whether two tiles can be combined */
-    public boolean tile_combine(Tile a, Tile b) {
-        if (a != null && b != null && a.value() == b.value()) {
-            return true;
-        }
-        return false;
-    }
-
-    /*for given col, return the first none null tile over row under top_row if exists else return the toppest null tile */
-    public Tile first_none_null_tile (int col, int row, int top_row) {
-        if (row == top_row) {
-            return board.tile(col, row);
-        } else if (board.tile(col, row + 1) == null) {
-            return first_none_null_tile(col, row + 1, top_row);
-        } else {
-            return board.tile(col, row + 1);
-        }
     }
 
     /** Checks if the game is over and sets the gameOver variable
