@@ -36,7 +36,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             otheritems[i] = get(i);
         }
         items = otheritems;
-        length /= 2;
+        length /= 4;
         front = length - 1;
         back = 0;
     }
@@ -118,7 +118,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private class ArrayDequeIterator implements Iterator<T> {
         int wizPos;
 
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             wizPos = (front + 1) % length;
         }
 
@@ -137,7 +137,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public boolean equals(Object o) {
         if (o instanceof Deque<?>) {
-            ArrayDeque<?> otherArrayDeque = (ArrayDeque<?>) o;
+            Deque<?> otherArrayDeque = (Deque<?>) o;
             if (size != otherArrayDeque.size()) {
                 return false;
             }

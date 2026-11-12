@@ -5,11 +5,11 @@ import java.util.Iterator;
 public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
 
     private static class Node<WhirlPool> {
-        public Node<WhirlPool> front;
-        public WhirlPool item;
-        public Node<WhirlPool> back;
+        private Node<WhirlPool> front;
+        private WhirlPool item;
+        private Node<WhirlPool> back;
 
-        public Node(Node<WhirlPool> f, WhirlPool w, Node<WhirlPool> b) {
+        Node(Node<WhirlPool> f, WhirlPool w, Node<WhirlPool> b) {
             front = f;
             item = w;
             back = b;
@@ -108,7 +108,7 @@ public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
         } else {
             Node<T> node = sentinel.back;
             return getRecursiveHelper(node, index);
-            }
+        }
     }
 
     private T getRecursiveHelper(Node<T> node, int index) {
@@ -125,7 +125,7 @@ public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
     private class LinkedListDequeIterator implements Iterator<T> {
         private Node<T> wizPos;
 
-        public LinkedListDequeIterator() {
+        LinkedListDequeIterator() {
             wizPos = sentinel.back;
         }
 
@@ -144,7 +144,7 @@ public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
     @Override
     public boolean equals(Object o) {
         if (o instanceof Deque) {
-            LinkedListDeque<?> otherLLDeque = (LinkedListDeque<?>) o;
+            Deque<?> otherLLDeque = (Deque<?>) o;
             if (size != otherLLDeque.size()) {
                 return false;
             }
