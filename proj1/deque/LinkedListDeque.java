@@ -124,6 +124,7 @@ public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
 
     private class LinkedListDequeIterator implements Iterator<T> {
         private Node<T> wizPos;
+        private int times = 1;
 
         LinkedListDequeIterator() {
             wizPos = sentinel.back;
@@ -131,11 +132,12 @@ public class LinkedListDeque<T>  implements Deque<T>, Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return wizPos.back != sentinel;
+            return wizPos.back != sentinel && times <= size;
         }
 
         @Override
         public T next() {
+            times += 1;
             wizPos = wizPos.back;
             return wizPos.front.item;
         }

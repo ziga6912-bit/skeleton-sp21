@@ -117,6 +117,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     private class ArrayDequeIterator implements Iterator<T> {
         int wizPos;
+        int times = 1;
 
         ArrayDequeIterator() {
             wizPos = (front + 1) % length;
@@ -127,11 +128,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             if (isEmpty()) {
                 return false;
             }
-            return wizPos != (back - 1 + length) % length;
+            return wizPos != (back - 1 + length) % length && times <= size;
         }
 
         @Override
         public T next() {
+            times += 1;
             wizPos = (wizPos + 1) % length;
             return items[(wizPos - 1 + length) % length];
         }
