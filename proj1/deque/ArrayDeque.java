@@ -22,7 +22,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private void sizeup() {
         T[] otheritems = (T[]) new Object[2 * length];
         for (int i = 0; i < size; i++) {
-            otheritems[i] = get(i);
+            otheritems[length / 2 + i] = get(i);
         }
         items = otheritems;
         front = length / 2 - 1;
@@ -43,26 +43,26 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public void addFirst(T item) {
-        size += 1;
-        if (size <= length) {
+        if (size < length) {
             items[front] = item;
         } else {
             sizeup();
             items[front] = item;
         }
         front = (front - 1 + length) % length;
+        size += 1;
     }
 
     @Override
     public void addLast(T item) {
-        size += 1;
-        if (size <= length) {
+        if (size < length) {
             items[back] = item;
         } else {
             sizeup();
             items[back] = item;
         }
         back = (back + 1) % length;
+        size += 1;
     }
 
     @Override
@@ -83,10 +83,10 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (isEmpty()) {
             return null;
         } else {
-            size -= 1;
-            if (length >= 16 && size / (double) length < 0.25) {
+            if (length >= 16 && (size - 1) / (double) length < 0.25) {
                 sizedown();
             }
+            size -= 1;
             front = (front + 1) % length;
             return items[front];
         }
@@ -97,10 +97,10 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (isEmpty()) {
             return null;
         } else {
-            size -= 1;
-            if (length >= 16 && size / (double) length < 0.25) {
+            if (length >= 16 && (size - 1) / (double) length < 0.25) {
                 sizedown();
             }
+            size -= 1;
             back = (back - 1 + length) % length;
             return items[back];
         }
