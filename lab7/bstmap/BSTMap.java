@@ -22,7 +22,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
     private BSTNode<K, V> root;
     private int size;
 
-    BSTMap() {
+    public BSTMap() {
         root = null;
         size = 0;
     }
@@ -38,7 +38,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
         return containsKeyHelper(root, key);
     }
 
-    private boolean containsKeyHelper(BSTNode node, K key) {
+    private boolean containsKeyHelper(BSTNode<K, V> node, K key) {
         if (node == null) {
             return false;
         }
